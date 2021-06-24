@@ -11,10 +11,16 @@ int main(int argc, char *argv[])
     char encriptacion[255];
     char *cadena1 = argv[1];
     char *cadena2 = argv[2];
+
+    if(strlen(cadena1) != strlen(cadena2)) {
+        printf("Las cadenas ingresadas deben tener la misma longitud.\n");
+        return 1;
+    }
+
     strcpy(encriptacion, cadena1);
 
     for(int i = 0; encriptacion[i] != '\0'; i++) {
-        encriptacion[i] += cadena2[i % strlen(cadena2)];
+        encriptacion[i] += cadena2[i];
     }
 
     printf("La palabra \"%s\" encriptada es: %s\n", cadena1, encriptacion);
