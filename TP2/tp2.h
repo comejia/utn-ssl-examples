@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "menu.h"
+#include "pagina.h"
 #include "procesador.h"
 
 void ejecutarOpcion(OPCION opcion, FILE *fd);

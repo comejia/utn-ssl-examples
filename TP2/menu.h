@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 typedef enum {
-    LISTAR_EN_PANTALLA = 1,
+    LISTAR = 1,
     GENERAR_CSV,
     GENERAR_HTML,
     SALIR = 0,

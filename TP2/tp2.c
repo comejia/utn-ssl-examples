@@ -4,13 +4,20 @@ int main(int argc, char **argv)
 {
     int opcion;
     FILE *fd;
+    TIPO_ARCHIVO tipo;
 
     if (argc < 2) {
-        printf("Debe ingresar como parametro: --offline o --online\n");
+        printf("Debe ingresar como parametro: --offline | --online\n");
         return EXIT_FAILURE;
     }
 
-    fd = leerPagina(argv[1]);
+    if(strcmp(argv[1], "--online") == 0) {
+        fd = leerPagina("wget -q -O- https://bolsar.info/lideres.php --no-check-certificate", PIPE_STREAM);
+        tipo = PIPE_STREAM;
+    } else {
+        fd = leerPagina("bolsar.html", STREAM);
+        tipo = STREAM;
+    }
     
     imprimirPagina(fd);
 
@@ -22,21 +29,22 @@ int main(int argc, char **argv)
         ejecutarOpcion((OPCION) opcion, fd);
     } while (opcion != SALIR);
     
-    cerrarPagina(fd);
+    cerrarPagina(fd, tipo);
+
     return EXIT_SUCCESS;
 }
 
 
 void ejecutarOpcion(OPCION opcion, FILE *fd) {
     switch (opcion) {
-        case LISTAR_EN_PANTALLA:
-            generarReporte(fd, ESPECIES_EN_NEGATIVO, CONSOLA);
+        case LISTAR:
+            listarEspeciesEnNegativoPor(fd, CONSOLA);
             break;
         case GENERAR_CSV:
-            generarReporte(fd, COTIZACION_COMPRA_VENTA, CSV);
+            generarCotizacionesCompraYVenta(fd, CSV);
             break;
         case GENERAR_HTML:
-            generarReporte(fd, ESPECIES_EN_NEGATIVO, HTML);
+            listarEspeciesEnNegativoPor(fd, HTML);
             break;
         case SALIR:
             printf("Saliendo de la aplicacion...\n");
