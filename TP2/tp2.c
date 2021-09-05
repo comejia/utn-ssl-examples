@@ -19,7 +19,7 @@ int main(int argc, char **argv)
         tipo = STREAM;
     }
     
-    imprimirPagina(fd);
+    //imprimirPagina(fd);
 
     do
     {
