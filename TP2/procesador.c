@@ -25,7 +25,16 @@ void generarCotizacionesCompraYVenta(FILE *fd, FORMATO formato) {
 }
 
 static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO tipo) {
-
+    if(reporte == ESPECIES_EN_NEGATIVO && tipo == CONSOLA) {
+        printf("\n\tEspecies en negativo\n");
+        for (int i = 0; i < tabla->filas; i++) {            
+            float val = strtof(tabla->regs[i].variacion, NULL);
+            if(val < 0) {
+                printf("Especie: %s, ", tabla->regs[i].especie);
+                printf("variacion: %f\n", val);
+            }
+        }
+    }
 }
 
 static void obtenerTabla(FILE *fd) {
@@ -69,6 +78,9 @@ static t_tabla *parsearTabla(char *pagina) {
             if(iDato != 7) {
                 while (*registro++ != '>');
                 for(i = 0; registro[i] != '<'; i++) {
+                    if(registro[i] == ',') {
+                        registro[i] = '.';
+                    }
                     dato[i] = registro[i];
                 }
             }
@@ -76,6 +88,9 @@ static t_tabla *parsearTabla(char *pagina) {
                 while (*registro++ != '>');
                 while (*registro++ != '>');
                 for(i = 0; registro[i] != '%'; i++) {
+                    if(registro[i] == ',') {
+                        registro[i] = '.';
+                    }
                     dato[i] = registro[i];
                 }
             }
