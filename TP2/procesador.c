@@ -49,13 +49,29 @@ static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO tipo) {
     }
 
     if(reporte == ESPECIES_EN_NEGATIVO && tipo == HTML) {
+        FILE *template = fopen("template.html", "r");
+        FILE *html = fopen("index.html", "w");
+        char buf[4096] = {0};
+        char linea[512] = {0};
+        while(fgets(linea, sizeof(linea), template) != NULL) {
+            strcat(buf, linea);
+        }
+        char fila[2048] = {0};
+        char filas[4096] = {0};
+        char *td = "<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n";
+
         for (int i = 0; i < tabla->filas; i++) {            
             float val = strtof(tabla->regs[i].variacion, NULL);
             if(val < 0) {
-                printf("Especie: %s, ", tabla->regs[i].especie);
-                printf("variacion: %f\n", val);
+                sprintf(fila, td,
+                    tabla->regs[i].especie, tabla->regs[i].vencimiento, tabla->regs[i].cantNominalCompra, tabla->regs[i].precioCompra, tabla->regs[i].precioVenta, tabla->regs[i].cantNominalVenta, tabla->regs[i].ultimo, tabla->regs[i].variacion,
+                    tabla->regs[i].apertura, tabla->regs[i].min, tabla->regs[i].max, tabla->regs[i].cierreAnterior, tabla->regs[i].volumen, tabla->regs[i].monto, tabla->regs[i].operacion, tabla->regs[i].hora);
+                strcat(filas, "<tr>\n");
+                strcat(filas, fila);
+                strcat(filas, "</tr>\n");
             }
         }
+        fprintf(html, buf, filas);
     }
 }
 
