@@ -58,7 +58,7 @@ static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO tipo) {
         }
         char fila[2048] = {0};
         char filas[4096] = {0};
-        char *td = "<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n";
+        char *td = "<td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s\%</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td>\n";
 
         for (int i = 0; i < tabla->filas; i++) {            
             float val = strtof(tabla->regs[i].variacion, NULL);
@@ -66,7 +66,14 @@ static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO tipo) {
                 sprintf(fila, td,
                     tabla->regs[i].especie, tabla->regs[i].vencimiento, tabla->regs[i].cantNominalCompra, tabla->regs[i].precioCompra, tabla->regs[i].precioVenta, tabla->regs[i].cantNominalVenta, tabla->regs[i].ultimo, tabla->regs[i].variacion,
                     tabla->regs[i].apertura, tabla->regs[i].min, tabla->regs[i].max, tabla->regs[i].cierreAnterior, tabla->regs[i].volumen, tabla->regs[i].monto, tabla->regs[i].operacion, tabla->regs[i].hora);
-                strcat(filas, "<tr>\n");
+                float compra = strtof(tabla->regs[i].precioCompra, NULL);
+                float venta = strtof(tabla->regs[i].precioVenta, NULL);
+                float apertura = strtof(tabla->regs[i].apertura, NULL);
+                if ( compra < apertura && venta < apertura) {
+                    strcat(filas, "<tr style=\"font-size:12px; text-align:center; background-color: green\">\n");    
+                } else {
+                    strcat(filas, "<tr style=\"font-size:12px; text-align:center;\">\n");
+                }
                 strcat(filas, fila);
                 strcat(filas, "</tr>\n");
             }
