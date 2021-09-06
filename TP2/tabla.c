@@ -19,9 +19,8 @@ void agregarRegistro(t_tabla *tabla) {
         tabla->regs = realloc(tabla->regs, sizeof(t_registro) * tabla->filas);
 }
 
-void guardarDatoEnRegistro(t_registro *reg, DATO indice, char *dato) {
-    //t_registro *aux = &(tabla->regs[(tabla->filas)-1]);
-    switch(indice) {
+void guardarDatoEnRegistro(t_registro *reg, DATO posicion, char *dato) {
+    switch(posicion) {
         case ESPECIE:
             strcpy(reg->especie, dato);
             break;
