@@ -21,12 +21,34 @@ void listarEspeciesEnNegativoPor(FILE *fd, FORMATO formato) {
 }
 
 void generarCotizacionesCompraYVenta(FILE *fd, FORMATO formato) {
-
+    t_tabla *tabla;
+    obtenerTabla(fd);
+    tabla = parsearTabla(pagina);
+    generarReporte(tabla, COTIZACION_COMPRA_VENTA, formato);
 }
 
 static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO tipo) {
     if(reporte == ESPECIES_EN_NEGATIVO && tipo == CONSOLA) {
         printf("\n\tEspecies en negativo\n");
+        for (int i = 0; i < tabla->filas; i++) {            
+            float val = strtof(tabla->regs[i].variacion, NULL);
+            if(val < 0) {
+                printf("Especie: %s, ", tabla->regs[i].especie);
+                printf("variacion: %s\n", tabla->regs[i].variacion);
+            }
+        }
+    }
+
+    if(reporte == COTIZACION_COMPRA_VENTA && tipo == CSV) {
+        FILE *file = fopen("compra_venta.csv", "w");
+        fprintf(file, "Especie; Precio de compra; Precio de venta; Apertura; Precio Minimo; Precio Maximo\n");
+        for (int i = 0; i < tabla->filas; i++) {
+            fprintf(file, "%s; %s; %s; %s; %s; %s;\n", 
+                tabla->regs[i].especie, tabla->regs[i].precioCompra, tabla->regs[i].precioVenta, tabla->regs[i].apertura, tabla->regs[i].min, tabla->regs[i].max);
+        }
+    }
+
+    if(reporte == ESPECIES_EN_NEGATIVO && tipo == HTML) {
         for (int i = 0; i < tabla->filas; i++) {            
             float val = strtof(tabla->regs[i].variacion, NULL);
             if(val < 0) {
@@ -68,7 +90,7 @@ static t_tabla *parsearTabla(char *pagina) {
     
     char dato[16];
     int iDato = 0;
-    int i;
+    int i, j;
 
     while ((registro = strstr(aux, td)) != NULL) {
         (tabla->filas)++;
@@ -77,32 +99,37 @@ static t_tabla *parsearTabla(char *pagina) {
         while ((registro = strstr(aux, td)) != NULL && iDato < 16) {
             if(iDato != 7) {
                 while (*registro++ != '>');
-                for(i = 0; registro[i] != '<'; i++) {
+                for(i = 0, j = 0; registro[i] != '<'; i++) {
+                    if(registro[i] == '.') {
+                        continue;
+                    }
                     if(registro[i] == ',') {
                         registro[i] = '.';
                     }
-                    dato[i] = registro[i];
+                    dato[j] = registro[i];
+                    j++;
                 }
             }
             else {
                 while (*registro++ != '>');
                 while (*registro++ != '>');
-                for(i = 0; registro[i] != '%'; i++) {
+                for(i = 0, j = 0; registro[i] != '%'; i++) {
+                    if(registro[i] == '.') {
+                        continue;
+                    }
                     if(registro[i] == ',') {
                         registro[i] = '.';
                     }
-                    dato[i] = registro[i];
+                    dato[j] = registro[i];
+                    j++;
                 }
             }
-            dato[i] = '\0';
+            dato[j] = '\0';
             guardarDato(&(tabla->regs[(tabla->filas)-1]), iDato, dato);
             aux = registro;
             iDato++;
         }
     }
-    // printf("FILAS: %d\n", tabla->filas);
-    // printf("DATO: %s\n", tabla->regs[1].variacion);
-    // printf("DATO: %s\n", tabla->regs[4].variacion);
 
     return tabla;
 }

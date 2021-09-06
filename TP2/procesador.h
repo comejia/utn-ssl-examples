@@ -24,22 +24,22 @@
 //     char hora[12];
 // } t_registro;
 typedef struct {
-    char especie[8];
-    char vencimiento[8];
-    char cantNominalCompra[8];
-    char precioCompra[8];
-    char precioVenta[8];
-    char cantNominalVenta[8];
-    char ultimo[8];
-    char variacion[8];
-    char apertura[8];
-    char min[8];
-    char max[8];
-    char cierreAnterior[8];
+    char especie[16];
+    char vencimiento[16];
+    char cantNominalCompra[16];
+    char precioCompra[16];
+    char precioVenta[16];
+    char cantNominalVenta[16];
+    char ultimo[16];
+    char variacion[16];
+    char apertura[16];
+    char min[16];
+    char max[16];
+    char cierreAnterior[16];
     char volumen[16];
     char monto[16];
-    char operacion[8];
-    char hora[12];
+    char operacion[16];
+    char hora[16];
 } t_registro;
 
 typedef struct {
