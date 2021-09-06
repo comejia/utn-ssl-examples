@@ -47,7 +47,6 @@ static void obtenerTabla(FILE *fd) {
         
     }
     strcat(pagina, line);
-    //printf("TABLA: %s", pagina);
 }
 
 static t_tabla *parsearTabla(char *pagina) {
@@ -59,18 +58,26 @@ static t_tabla *parsearTabla(char *pagina) {
     char *registro;
     
     char dato[16];
-    int i;
     int iDato = 0;
+    int i;
 
     while ((registro = strstr(aux, td)) != NULL) {
         (tabla->filas)++;
         tabla->regs = realloc(tabla->regs, sizeof(t_registro) * tabla->filas);
         iDato = 0;
         while ((registro = strstr(aux, td)) != NULL && iDato < 16) {
-            while (*registro++ != '>');
-            // PROCESAR DATO CON SPAN (PORCENTAJE DE VARIACION)
-            for(i = 0; registro[i] != '<'; i++) {
-                dato[i] = registro[i];
+            if(iDato != 7) {
+                while (*registro++ != '>');
+                for(i = 0; registro[i] != '<'; i++) {
+                    dato[i] = registro[i];
+                }
+            }
+            else {
+                while (*registro++ != '>');
+                while (*registro++ != '>');
+                for(i = 0; registro[i] != '%'; i++) {
+                    dato[i] = registro[i];
+                }
             }
             dato[i] = '\0';
             guardarDato(&(tabla->regs[(tabla->filas)-1]), iDato, dato);
@@ -78,8 +85,9 @@ static t_tabla *parsearTabla(char *pagina) {
             iDato++;
         }
     }
-    //printf("FILAS: %d\n", tabla->filas);
-    //printf("DATO: %s\n", tabla->regs[1].min);
+    // printf("FILAS: %d\n", tabla->filas);
+    // printf("DATO: %s\n", tabla->regs[1].variacion);
+    // printf("DATO: %s\n", tabla->regs[4].variacion);
 
     return tabla;
 }
