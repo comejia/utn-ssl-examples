@@ -7,6 +7,7 @@
 
 #include "tabla.h"
 #include "macros.h"
+#include "configuracion.h"
 
 typedef enum {
     ESPECIES_EN_NEGATIVO,

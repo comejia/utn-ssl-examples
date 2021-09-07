@@ -15,7 +15,7 @@ int main(int argc, char **argv)
         fuente = "wget -q -O- https://bolsar.info/lideres.php --no-check-certificate";
         tipo = PIPE_STREAM;
     } else {
-        fuente = "bolsar.html";
+        fuente = "../recursos/bolsar.html";
         tipo = STREAM;
     }
 

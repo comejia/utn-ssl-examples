@@ -32,12 +32,12 @@ static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO salida) {
             if(salida == CONSOLA) {
                 listarEnConsola(tabla);
             } else if(salida == HTML) {
-                generarHTML(tabla, "index.html");
+                generarHTML(tabla, RUTA_SALIDA_HTML);
             }
             break;
         case COTIZACION_COMPRA_VENTA:
             if(salida == CSV) {
-                generarCSV(tabla, "compra_venta.csv");
+                generarCSV(tabla, RUTA_SALIDA_CSV);
             }
             break;
     }
@@ -59,7 +59,7 @@ static char *obtenerTablaDePagina(FILE *fd) {
         if(strstr(linea, "</tbody>") != NULL) {
             break;
         }
-        if(strstr(linea, ">48hs<")) {
+        if(strstr(linea, ACCION_VENCIMIENTO)) {
             strcat(pagina, linea);
         }
         
@@ -102,7 +102,7 @@ static t_tabla *parsearTabla(char *pagina) {
 static void listarEnConsola(t_tabla *tabla) {
     printf("\n\tEspecies en negativo\n");
     printf(HEADER_CONSOLA);
-    for(int i = 0; i < tabla->filas; i++) {            
+    for(int i = 0; i < tabla->filas; i++) {
         if(obtenerNumero(tabla->regs[i].variacion) < 0) {
             printf(FORMATO_FILA_CONSOLA, 
                 tabla->regs[i].especie, tabla->regs[i].vencimiento, tabla->regs[i].cantNominalCompra, tabla->regs[i].precioCompra, tabla->regs[i].precioVenta, tabla->regs[i].cantNominalVenta, tabla->regs[i].ultimo, tabla->regs[i].variacion,
@@ -126,7 +126,7 @@ static void generarCSV(t_tabla *tabla, char *ruta) {
 }
 
 static void generarHTML(t_tabla *tabla, char *ruta) {
-    FILE *template = fopen("template.html", "r");
+    FILE *template = fopen("../recursos/template.html", "r");
     FILE *html = fopen(ruta, "w");
     char salida[8192] = {0};
     char filasTabla[8192] = {0};
