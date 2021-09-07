@@ -46,24 +46,26 @@ static void generarReporte(t_tabla *tabla, REPORTE reporte, FORMATO salida) {
 static char *obtenerTablaDePagina(FILE *fd) {
     char *pagina = (char *)malloc(sizeof(char) * 20480);
     memset(pagina, (char)'\0', 20480);
-    char line[2048];
-    while(fgets(line, sizeof(line), fd) != NULL) {
-        if(strstr(line, "<tbody>") == NULL) {
+    char linea[2048];
+
+    while(fgets(linea, sizeof(linea), fd) != NULL) {
+        if(strstr(linea, "<tbody>") == NULL) {
             continue;
         }
         break;
     }
-    strcat(pagina, line);
-    while(fgets(line, sizeof(line), fd) != NULL) {
-        if(strstr(line, "</tbody>") != NULL) {
+    strcat(pagina, linea);
+    while(fgets(linea, sizeof(linea), fd) != NULL) {
+        if(strstr(linea, "</tbody>") != NULL) {
             break;
         }
-        if(strstr(line, ">48hs<")) {
-            strcat(pagina, line);
+        if(strstr(linea, ">48hs<")) {
+            strcat(pagina, linea);
         }
         
     }
-    strcat(pagina, line);
+    strcat(pagina, linea);
+
     return pagina;
 }
 
@@ -73,44 +75,24 @@ static t_tabla *parsearTabla(char *pagina) {
     char *registro;
     
     char dato[MAX_DATOS];
-    int iDato = 0;
-    int i, j;
+    int indiceDato = 0;
+    int i;
 
-    while ((registro = strstr(aux, INICIO_TD)) != NULL) {
+    while (strstr(aux, INICIO_TD) != NULL) {
         agregarRegistro(tabla);
-        iDato = 0;
-        while ((registro = strstr(aux, INICIO_TD)) != NULL && iDato < MAX_DATOS) {
-            if(iDato != 7) {
+        indiceDato = 0;
+        while ((registro = strstr(aux, INICIO_TD)) != NULL && indiceDato < MAX_DATOS) {
+            while (*registro++ != INICIO_TAG);
+            if((DATO)indiceDato == VARIACION) {
                 while (*registro++ != INICIO_TAG);
-                for(i = 0, j = 0; registro[i] != FIN_TAG; i++) {
-                    if(registro[i] == '.') {
-                        continue;
-                    }
-                    if(registro[i] == ',') {
-                        registro[i] = '.';
-                    }
-                    dato[j] = registro[i];
-                    j++;
-                }
             }
-            else {
-                while (*registro++ != INICIO_TAG);
-                while (*registro++ != INICIO_TAG);
-                for(i = 0, j = 0; registro[i] != '%'; i++) {
-                    if(registro[i] == '.') {
-                        continue;
-                    }
-                    if(registro[i] == ',') {
-                        registro[i] = '.';
-                    }
-                    dato[j] = registro[i];
-                    j++;
-                }
+            for(i = 0; registro[i] != FIN_TAG; i++) {
+                dato[i] = registro[i];
             }
-            dato[j] = '\0';
-            guardarDatoEnRegistro(&(tabla->regs[(tabla->filas)-1]), iDato, dato);
+            dato[i] = '\0';
+            guardarDatoEnRegistro(&(tabla->regs[(tabla->filas) - 1]), indiceDato, dato);
             aux = registro;
-            iDato++;
+            indiceDato++;
         }
     }
 
@@ -182,5 +164,16 @@ static void cargarDatosDeArchivo(char *buffer, FILE *fd) {
 }
 
 static float obtenerNumero(char *numero) {
-    return strtof(numero, NULL);
+    char aux[16] = {'\0'};
+    int j = 0;
+    for(int i = 0; numero[i] != '\0'; i++) {
+        if(numero[i] == '.' || numero[i] == '%' || numero[i] == ' ') {
+            continue;
+        }
+        aux[j] = numero[i] == ',' ? '.' : numero[i];
+        j++;
+    }
+    aux[j] = '\0';
+
+    return strtof(aux, NULL);
 }

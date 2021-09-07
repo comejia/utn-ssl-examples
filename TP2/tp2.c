@@ -18,7 +18,7 @@ int main(int argc, char **argv)
         fd = leerPagina("bolsar.html", STREAM);
         tipo = STREAM;
     }
-    
+
     //imprimirPagina(fd);
 
     do
