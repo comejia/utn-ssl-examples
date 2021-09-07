@@ -3,7 +3,7 @@
 int main(int argc, char **argv)
 {
     int opcion;
-    FILE *fd;
+    char *fuente = NULL;
     TIPO_ARCHIVO tipo;
 
     if (argc < 2) {
@@ -12,44 +12,49 @@ int main(int argc, char **argv)
     }
 
     if(strcmp(argv[1], "--online") == 0) {
-        fd = leerPagina("wget -q -O- https://bolsar.info/lideres.php --no-check-certificate", PIPE_STREAM);
+        fuente = "wget -q -O- https://bolsar.info/lideres.php --no-check-certificate";
         tipo = PIPE_STREAM;
     } else {
-        fd = leerPagina("bolsar.html", STREAM);
+        fuente = "bolsar.html";
         tipo = STREAM;
     }
-    
-    //imprimirPagina(fd);
 
     do
     {
         menu();
         printf("Ingresar opcion: ");
         scanf("%d", &opcion);
-        ejecutarOpcion((OPCION) opcion, fd);
+        ejecutarOpcion((OPCION) opcion, fuente, tipo);
     } while (opcion != SALIR);
-    
-    cerrarPagina(fd, tipo);
 
     return EXIT_SUCCESS;
 }
 
 
-void ejecutarOpcion(OPCION opcion, FILE *fd) {
+void ejecutarOpcion(OPCION opcion, char *fuente, TIPO_ARCHIVO tipo) {
+    FILE *fd = leerPagina(fuente, tipo);
+
     switch (opcion) {
         case LISTAR:
-            listarEspeciesEnNegativoPor(fd, CONSOLA);
+            listarEspeciesEnNegativo(fd, CONSOLA);
             break;
         case GENERAR_CSV:
             generarCotizacionesCompraYVenta(fd, CSV);
+            printf("\nReporte generado con exito. Abra el archivo 'compra_venta.csv' para ver su contenido.\n");
             break;
         case GENERAR_HTML:
-            listarEspeciesEnNegativoPor(fd, HTML);
+            listarEspeciesEnNegativo(fd, HTML);
+            printf("\nReporte generado con exito. Abra el archivo 'index.html' para ver su contenido.\n");
+            break;
+        case IMPRIMIR_CODIGO_FUENTE:
+            imprimirPagina(fd);
             break;
         case SALIR:
-            printf("Saliendo de la aplicacion...\n");
+            printf("\nSaliendo de la aplicacion...\n");
             break;
         default:
-            printf("La opcion seleccionada no es valida. Ingresa una opcion valida\n");
+            printf("\nLa opcion seleccionada no es valida. Ingresa otra opción\n");
     }
+
+    cerrarPagina(fd, tipo);
 }

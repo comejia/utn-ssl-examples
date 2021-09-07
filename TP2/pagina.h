@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAM_MEMORIA 1048576
+#define TAM_MEMORIA 1048576 // 1M
 
 typedef enum {
     STREAM,

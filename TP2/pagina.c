@@ -1,16 +1,13 @@
 #include "pagina.h"
 
-char pagina[TAM_MEMORIA];
-
-
 FILE *leerPagina(char *fuente, TIPO_ARCHIVO tipo) {
     FILE *fd = NULL;
     switch(tipo) {
         case PIPE_STREAM:
-            fd = popen("wget -q -O- https://bolsar.info/lideres.php --no-check-certificate", "r");
+            fd = popen(fuente, "r");
             break;
         case STREAM:
-            fd = fopen("bolsar.html", "r");
+            fd = fopen(fuente, "r");
             break;
         default:
             printf("Tipo de archivo invalido");
@@ -20,6 +17,7 @@ FILE *leerPagina(char *fuente, TIPO_ARCHIVO tipo) {
 }
 
 void imprimirPagina(FILE *fd) {
+    char pagina[TAM_MEMORIA];
     while(fgets(pagina, sizeof(pagina), fd) != NULL) {
         printf("%s\n", pagina);
     }
