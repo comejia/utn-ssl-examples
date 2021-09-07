@@ -38,13 +38,13 @@ int main(int argc, char **argv)
 void ejecutarOpcion(OPCION opcion, FILE *fd) {
     switch (opcion) {
         case LISTAR:
-            listarEspeciesEnNegativoPor(fd, CONSOLA);
+            listarEspeciesEnNegativo(fd, CONSOLA);
             break;
         case GENERAR_CSV:
             generarCotizacionesCompraYVenta(fd, CSV);
             break;
         case GENERAR_HTML:
-            listarEspeciesEnNegativoPor(fd, HTML);
+            listarEspeciesEnNegativo(fd, HTML);
             break;
         case SALIR:
             printf("Saliendo de la aplicacion...\n");

@@ -8,9 +8,7 @@ t_tabla *crearTabla() {
 }
 
 void eliminarTabla(t_tabla *tabla) {
-    for (int i = 0; i < tabla->filas; i++){
-        free(&(tabla->regs[i]));
-    }
+    free(tabla->regs);
     free(tabla);
 }
 

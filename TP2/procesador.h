@@ -9,12 +9,17 @@
 #include "macros.h"
 
 typedef enum {
+    ESPECIES_EN_NEGATIVO,
+    COTIZACION_COMPRA_VENTA,
+} REPORTE;
+
+typedef enum {
     CONSOLA,
     CSV,
     HTML
 } FORMATO;
 
-void listarEspeciesEnNegativoPor(FILE *fd, FORMATO formato);
+void listarEspeciesEnNegativo(FILE *fd, FORMATO formato);
 void generarCotizacionesCompraYVenta(FILE *fd, FORMATO formato);
 
 #endif
