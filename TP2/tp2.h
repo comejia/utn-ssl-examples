@@ -9,6 +9,6 @@
 #include "pagina.h"
 #include "procesador.h"
 
-void ejecutarOpcion(OPCION opcion, FILE *fd);
+void ejecutarOpcion(OPCION opcion, char *fuente, TIPO_ARCHIVO tipo);
 
 #endif

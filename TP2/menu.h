@@ -7,6 +7,7 @@ typedef enum {
     LISTAR = 1,
     GENERAR_CSV,
     GENERAR_HTML,
+    IMPRIMIR_CODIGO_FUENTE,
     SALIR = 0,
 } OPCION;
 
