@@ -1,6 +1,10 @@
 inicio
 
-a := 10;
+a := 10+(3-2);
+
+leer(a);
+
+escribir(b);
 
 fin
 ?

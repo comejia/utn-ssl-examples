@@ -7,6 +7,8 @@
 
 %option header-file="scanner.h"
 %option outfile="scanner.c"
+%option noinput
+%option nounput
 
 digito                  [0-9]
 letra                   [a-zA-Z]

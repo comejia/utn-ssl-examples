@@ -19,6 +19,8 @@
 %token LEER ESCRIBIR
 %token <numero> CONSTANTE
 
+%left SUMA RESTA
+
 %start objetivo
 
 %%
@@ -49,19 +51,19 @@ sentencia:
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
 listaIdentificadores:
-    ID 
-    | listaIdentificadores COMA  ID
+    ID
+    | listaIdentificadores COMA ID
     ;
 
 // <listaExpresiones>  ->  <expresión>  {COMA  <expresión>}
 listaExpresiones:
-    expresion 
+    expresion
     | listaExpresiones COMA expresion
     ;
 
 // <expresión>  ->  <primaria>  {<operadorAditivo>  <primaria>}
 expresion:
-    primaria 
+    primaria
     | expresion operadorAditivo primaria
     ;
 
