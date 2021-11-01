@@ -1,6 +1,10 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
+    #include "scanner.h"
+
+    //int yylex();
+    void yyerror(const char *s);
 %}
 
 %defines "parser.h"
@@ -31,31 +35,35 @@ programa:
 
 // <listaSentencias>  ->  <sentencia>  {<sentencia>}
 listaSentencias:
-    sentencia {sentencia}
+    sentencia 
+    | listaSentencias sentencia
     ;
 
 // <sentencia>  ->  ID  ASIGNACIÓN  <expresión>  PUNTOYCOMA  |
 //      LEER  PARENIZQUIERDO  <listaIdentificadores>  PARENDERECHO  PUNTOYCOMA  |
 //      ESCRIBIR  PARENIZQUIERDO  <listaExpresiones>  PARENDERECHO  PUNTOYCOMA
 sentencia:
-    ID ASIGNACION expresion PUNTOYCOMA                                              { printf("Sentencia asignacion\n") }
-    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA              { printf("Sentencia leer\n") }
-    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA              { printf("Sentencia escribir\n") }
+    ID ASIGNACION expresion PUNTOYCOMA                                              { printf("Sentencia asignacion\n"); }
+    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA              { printf("Sentencia leer\n"); }
+    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA              { printf("Sentencia escribir\n"); }
     ;
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
 listaIdentificadores:
-    ID {COMA  ID}
+    ID 
+    | listaIdentificadores COMA  ID
     ;
 
 // <listaExpresiones>  ->  <expresión>  {COMA  <expresión>}
 listaExpresiones:
-    expresion {COMA expresion}
+    expresion 
+    | listaExpresiones COMA expresion
     ;
 
 // <expresión>  ->  <primaria>  {<operadorAditivo>  <primaria>}
 expresion:
-    primaria {operadorAditivo primaria}
+    primaria 
+    | expresion operadorAditivo primaria
     ;
 
 // <primaria>  ->  ID  |  CONSTANTE  | PARENIZQUIERDO  <expresión>  PARENDERECHO
@@ -74,5 +82,11 @@ operadorAditivo:
 %%
 
 
+// void yyerror(const char *s){ // si no hubiese estado definido, directamente el yyerror imprimiría: "syntax error" solamente
+//     printf("Línea #%d: %s\n", yylineno, s);
+//     return;
+// }
 
-
+void yyerror(const char *s) {
+  printf("Error en la expresion. %s\n",s);
+}
