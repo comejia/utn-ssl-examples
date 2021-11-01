@@ -3,7 +3,6 @@
     #include <stdlib.h>
     #include "scanner.h"
 
-    //int yylex();
     void yyerror(const char *s);
 %}
 
@@ -88,5 +87,5 @@ operadorAditivo:
 // }
 
 void yyerror(const char *s) {
-  printf("Error en la expresion. %s\n",s);
+  printf("Error en la expresion. %s\n", s);
 }

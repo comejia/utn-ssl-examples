@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "parser.h"
+#include "scanner.h"
 
 extern int yynerrs;
 extern int yylexerrs;
-extern FILE *yyin;
 
 int main(int argc, char **argv) {
     if (argc > 2) {
@@ -14,9 +14,11 @@ int main(int argc, char **argv) {
     }
 
     if (argc == 2) {
-        //yyin = fopen(argv[1], "r");
-        //FILE *archivo = fopen(argv[1], "r");
-        //yyset_in(archivo);
+        printf("Ingreso de datos desde: %s\n", argv[1]);
+        FILE *archivo = fopen(argv[1], "r");
+        yyset_in(archivo);
+    } else {
+        printf("Ingreso de datos desde consola\n");
     }
 
     yyparse();
