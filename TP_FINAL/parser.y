@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "scanner.h"
+    #define YYSTYPE int
 
     void yyerror(const char *s);
 %}
@@ -9,17 +10,22 @@
 %defines "parser.h"
 %output "parser.c"
 
-%union {
+/* %union {
+    //char *cadena;
     int numero;
-}
+} */
 
 %token FDT INICIO FIN ID
+//%token <cadena> ID
 %token ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA
 %token SUMA RESTA
 %token LEER ESCRIBIR
-%token <numero> CONSTANTE
+%token CONSTANTE
 
 %left SUMA RESTA
+%right ASIGNACION
+
+//%type <numero> expresion primaria operadorAditivo
 
 %start objetivo
 
@@ -44,9 +50,9 @@ listaSentencias:
 //      LEER  PARENIZQUIERDO  <listaIdentificadores>  PARENDERECHO  PUNTOYCOMA  |
 //      ESCRIBIR  PARENIZQUIERDO  <listaExpresiones>  PARENDERECHO  PUNTOYCOMA
 sentencia:
-    ID ASIGNACION expresion PUNTOYCOMA                                              { printf("Sentencia asignacion\n"); }
-    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA              { printf("Sentencia leer\n"); }
-    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA              { printf("Sentencia escribir\n"); }
+    ID ASIGNACION expresion PUNTOYCOMA                                      { printf("Sentencia asignacion (valor = %d)\n", $3); }
+    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      { printf("Sentencia leer\n"); }
+    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      { printf("Sentencia escribir\n"); }
     ;
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
@@ -57,36 +63,30 @@ listaIdentificadores:
 
 // <listaExpresiones>  ->  <expresión>  {COMA  <expresión>}
 listaExpresiones:
-    expresion
-    | listaExpresiones COMA expresion
+    expresion                                                               { printf("Resultado %d\n", $1); }
+    | listaExpresiones COMA expresion                                       { printf("Resultado %d\n", $3); }
     ;
 
 // <expresión>  ->  <primaria>  {<operadorAditivo>  <primaria>}
 expresion:
-    primaria
-    | expresion operadorAditivo primaria
-    ;
+    primaria                                                                { $$ = $1; }
+    | expresion operadorAditivo primaria                                    { $$ = $2 == '+' ? $1 + $3 : $1 - $3; }
 
 // <primaria>  ->  ID  |  CONSTANTE  | PARENIZQUIERDO  <expresión>  PARENDERECHO
 primaria:
-    ID
-    | CONSTANTE
-    | PARENIZQUIERDO expresion PARENDERECHO
+    ID                                                                      { $$ = 0; } //{ $$ = atoi($1); } //no deveuelve el valor del identificador
+    | CONSTANTE                                                             { $$ = $1; }
+    | PARENIZQUIERDO expresion PARENDERECHO                                 { $$ = $2; }
     ;
 
 // <operadorAditivo>  ->  SUMA | RESTA
 operadorAditivo:
-    SUMA
-    | RESTA
+    SUMA                                                                    { $$ = '+'; }
+    | RESTA                                                                 { $$ = '-'; }
     ;
 
 %%
 
-
-// void yyerror(const char *s){ // si no hubiese estado definido, directamente el yyerror imprimiría: "syntax error" solamente
-//     printf("Línea #%d: %s\n", yylineno, s);
-//     return;
-// }
 
 void yyerror(const char *s) {
   printf("Error en la expresion. %s\n", s);

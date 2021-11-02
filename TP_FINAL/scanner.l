@@ -1,6 +1,7 @@
 %{
     #include <stdio.h>
     #include <string.h>
+    #include <stdlib.h>
     #include "parser.h"
 %}
 
@@ -24,7 +25,8 @@ leer                    return LEER;
 escribir                return ESCRIBIR;
 
 {identificador}         return ID;
-{constante}             return CONSTANTE;
+{constante}             {yylval = atoi(yytext); return CONSTANTE;}
+
 
 "("                     return PARENIZQUIERDO;
 ")"                     return PARENDERECHO;
@@ -39,5 +41,9 @@ escribir                return ESCRIBIR;
 %%
 
 int yywrap(void) {
+//{identificador}         {yylval.cadena = strdup(yytext); return ID;}
+//{constante}             {yylval.numero = atoi(yytext); return CONSTANTE;}
+//{identificador}         return ID;
+//{constante}             return CONSTANTE;
     return 1;
 }

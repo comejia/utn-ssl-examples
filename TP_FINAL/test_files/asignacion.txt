@@ -1,10 +1,11 @@
 inicio
 
-a := 10+(3-2);
+a := 10+(2-24);
 
-leer(a);
+leer(a, b);
 
-escribir(b);
+escribir(a);
+escribir(1+10-5, 8+(1-4));
 
 fin
 ?
