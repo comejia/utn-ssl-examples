@@ -57,13 +57,14 @@ void cargarEntradaEnTabla(char *simbolo) {
 int leerValorSimbolo(char *simbolo) {
     int indice = buscarSimbolo(simbolo);
     if (indice == -1) {
-        printf("No hay valor asignado para %s.\n", simbolo);
+        printf("No hay valor asignado para simbolo '%s'.\n", simbolo);
         exit(EXIT_FAILURE);
     }
     return ts[indice].valor;
 }
 
 void imprimirTablaSimbolos(void) {
+    printf("\n\n\t\t TABLA DE SIMBOLOS\n");
     for (int i = 0; i < TAMANIO_TABLA; i++) {
         if (strcmp(ts[i].id, "")) {
             printf("%s := %d\n", ts[i].id, ts[i].valor);

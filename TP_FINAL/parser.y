@@ -54,8 +54,8 @@ listaSentencias:
 //      ESCRIBIR  PARENIZQUIERDO  <listaExpresiones>  PARENDERECHO  PUNTOYCOMA
 sentencia:
     ID ASIGNACION expresion PUNTOYCOMA                                      { guardarValorEnTabla($1, $3); } //{ printf("Sentencia asignacion (valor = %d)\n", $3); }
-    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      { printf("Sentencia leer\n"); }
-    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      { printf("Sentencia escribir\n"); }
+    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      //{ printf("Sentencia leer\n"); }
+    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      //{ printf("Sentencia escribir\n"); }
     ;
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
@@ -66,8 +66,8 @@ listaIdentificadores:
 
 // <listaExpresiones>  ->  <expresión>  {COMA  <expresión>}
 listaExpresiones:
-    expresion                                                               { printf("Resultado %d\n", $1); }
-    | listaExpresiones COMA expresion                                       { printf("Resultado %d\n", $3); }
+    expresion                                                               { printf("Resultado expresion: %d\n", $1); }
+    | listaExpresiones COMA expresion                                       { printf("Resultado expresion: %d\n", $3); }
     ;
 
 // <expresión>  ->  <primaria>  {<operadorAditivo>  <primaria>}

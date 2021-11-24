@@ -1,0 +1,15 @@
+inicio
+
+a := 10+(2-24);
+
+escribir(a);
+
+escribir(1+10-5);
+
+escribir(a, (1+10-5));
+
+escribir(1+10-5, 8+(1-4));
+
+fin
+
+?

@@ -15,11 +15,11 @@ int main(int argc, char **argv) {
     }
 
     if (argc == 2) {
-        printf("Ingreso de datos desde: %s\n", argv[1]);
+        printf("Ingreso de datos desde: %s\n\n", argv[1]);
         FILE *archivo = fopen(argv[1], "r");
         yyset_in(archivo);
     } else {
-        printf("Ingreso de datos desde consola\n");
+        printf("Ingreso de datos desde consola\n\n");
         yyset_in(stdin);
     }
 
