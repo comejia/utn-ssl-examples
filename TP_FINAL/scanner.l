@@ -27,7 +27,6 @@ escribir                return ESCRIBIR;
 {identificador}         { yylval.cadena = strdup(yytext); return ID; }
 {constante}             { yylval.numero = atoi(yytext); return CONSTANTE; }
 
-
 "("                     return PARENIZQUIERDO;
 ")"                     return PARENDERECHO;
 ";"                     return PUNTOYCOMA;
@@ -35,8 +34,9 @@ escribir                return ESCRIBIR;
 "+"                     return SUMA;
 "-"                     return RESTA;
 ":="                    return ASIGNACION;
+
 "?"                     return FDT;
-{espacio}               ;
+{espacio}               
 
 %%
 

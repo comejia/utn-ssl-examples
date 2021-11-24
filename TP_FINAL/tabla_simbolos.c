@@ -49,7 +49,7 @@ void guardarValorEnTabla(char *simbolo, int valor) {
 void cargarEntradaEnTabla(char *simbolo) {
     int valor;
     //char aux[20];
-    printf("Ingrese valor de %s: ", simbolo);
+    printf("Ingrese valor de '%s': ", simbolo);
     scanf("%d", &valor);
     guardarValorEnTabla(simbolo, valor);
 }
@@ -57,7 +57,7 @@ void cargarEntradaEnTabla(char *simbolo) {
 int leerValorSimbolo(char *simbolo) {
     int indice = buscarSimbolo(simbolo);
     if (indice == -1) {
-        printf("No hay valor asignado para simbolo '%s'.\n", simbolo);
+        printf("No hay valor asignado para: '%s'.\n", simbolo);
         exit(EXIT_FAILURE);
     }
     return ts[indice].valor;
