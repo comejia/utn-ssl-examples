@@ -1,11 +1,12 @@
 inicio
 
-a := 10+(2-24);
+a := 10+(2- 24);
 
-leer(a, b);
+b := a;
 
-escribir(a);
-escribir(1+10-5, 8+(1-4));
+c:=b+5;
+
+d := 20;
 
 fin
 ?
