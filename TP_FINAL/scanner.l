@@ -41,13 +41,5 @@ escribir                return ESCRIBIR;
 %%
 
 int yywrap(void) {
-//{identificador}         {yylval.cadena = strdup(yytext); return ID;}
-//{constante}             {yylval.numero = atoi(yytext); return CONSTANTE;}
-//{identificador}         return ID;
-//{constante}             return CONSTANTE;
-
-//{identificador}         return ID;
-//{constante}             {yylval = atoi(yytext); return CONSTANTE;}
-
     return 1;
 }
