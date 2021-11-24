@@ -24,8 +24,8 @@ fin                     return FIN;
 leer                    return LEER;
 escribir                return ESCRIBIR;
 
-{identificador}         return ID;
-{constante}             {yylval = atoi(yytext); return CONSTANTE;}
+{identificador}         { yylval.cadena = strdup(yytext); return ID; }
+{constante}             { yylval.numero = atoi(yytext); return CONSTANTE; }
 
 
 "("                     return PARENIZQUIERDO;
@@ -45,5 +45,9 @@ int yywrap(void) {
 //{constante}             {yylval.numero = atoi(yytext); return CONSTANTE;}
 //{identificador}         return ID;
 //{constante}             return CONSTANTE;
+
+//{identificador}         return ID;
+//{constante}             {yylval = atoi(yytext); return CONSTANTE;}
+
     return 1;
 }

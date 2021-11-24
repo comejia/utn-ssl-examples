@@ -2,7 +2,9 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "scanner.h"
-    #define YYSTYPE int
+    #include "tabla_simbolos.h"
+
+    //#define YYSTYPE int
 
     void yyerror(const char *s);
 %}
@@ -10,29 +12,30 @@
 %defines "parser.h"
 %output "parser.c"
 
-/* %union {
-    //char *cadena;
+%union {
+    char *cadena;
     int numero;
-} */
+}
 
-%token FDT INICIO FIN ID
-//%token <cadena> ID
+%token FDT INICIO FIN
+%token <cadena> ID
 %token ASIGNACION PUNTOYCOMA PARENIZQUIERDO PARENDERECHO COMA
 %token SUMA RESTA
 %token LEER ESCRIBIR
-%token CONSTANTE
+%token <numero> CONSTANTE
 
 %left SUMA RESTA
 %right ASIGNACION
 
-//%type <numero> expresion primaria operadorAditivo
+%type <numero> expresion primaria operadorAditivo
 
 %start objetivo
 
 %%
+
 // <objetivo>  ->  <programa>  FDT
 objetivo:
-    programa FDT
+    programa FDT                                                            { imprimirTablaSimbolos(); }
     ;
 
 // <programa>  ->  INICIO  <listaSentencias>  FIN
@@ -50,15 +53,15 @@ listaSentencias:
 //      LEER  PARENIZQUIERDO  <listaIdentificadores>  PARENDERECHO  PUNTOYCOMA  |
 //      ESCRIBIR  PARENIZQUIERDO  <listaExpresiones>  PARENDERECHO  PUNTOYCOMA
 sentencia:
-    ID ASIGNACION expresion PUNTOYCOMA                                      { printf("Sentencia asignacion (valor = %d)\n", $3); }
+    ID ASIGNACION expresion PUNTOYCOMA                                      { guardarValorEnTabla($1, $3); } //{ printf("Sentencia asignacion (valor = %d)\n", $3); }
     | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      { printf("Sentencia leer\n"); }
     | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      { printf("Sentencia escribir\n"); }
     ;
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
 listaIdentificadores:
-    ID
-    | listaIdentificadores COMA ID
+    ID                                                                      { cargarEntradaEnTabla($1); }
+    | listaIdentificadores COMA ID                                          { cargarEntradaEnTabla($3); }
     ;
 
 // <listaExpresiones>  ->  <expresión>  {COMA  <expresión>}
@@ -74,7 +77,7 @@ expresion:
 
 // <primaria>  ->  ID  |  CONSTANTE  | PARENIZQUIERDO  <expresión>  PARENDERECHO
 primaria:
-    ID                                                                      { $$ = 0; } //{ $$ = atoi($1); } //no deveuelve el valor del identificador
+    ID                                                                      { $$ = leerValorSimbolo($1); } //{ $$ = atoi($1); } //no deveuelve el valor del identificador
     | CONSTANTE                                                             { $$ = $1; }
     | PARENIZQUIERDO expresion PARENDERECHO                                 { $$ = $2; }
     ;
@@ -89,5 +92,5 @@ operadorAditivo:
 
 
 void yyerror(const char *s) {
-  printf("Error en la expresion. %s\n", s);
+    printf("Error en la expresion. %s\n", s);
 }
