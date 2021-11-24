@@ -4,9 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
-#define TAMANIO_TABLA 100
-#define LONGITUD_MAX_CARACTERES 32
+#define TAMANIO_TABLA               100
+#define LONGITUD_MAX_CARACTERES     32
+#define ENTRADA_VACIA               ""
 
 typedef struct {
     char id[LONGITUD_MAX_CARACTERES];
@@ -21,12 +24,6 @@ void cargarEntradaEnTabla(char *simbolo);
 
 int leerValorSimbolo(char *simbolo);
 
-void imprimirTablaSimbolos(void);
-
-// void init_TS(void);
-// void EscribirATabla(char* s, int v);
-// void cargarEntradas(char* p1); // para Leer(IDs);
-// int ValorSimbolo(char* s);
-// int IndiceTabla(char* s);
+void imprimirTablaDeSimbolos(void);
 
 #endif

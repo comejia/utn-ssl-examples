@@ -35,7 +35,7 @@
 
 // <objetivo>  ->  <programa>  FDT
 objetivo:
-    programa FDT                                                            { imprimirTablaSimbolos(); }
+    programa FDT                                                            { imprimirTablaDeSimbolos(); exit(EXIT_SUCCESS);}
     ;
 
 // <programa>  ->  INICIO  <listaSentencias>  FIN
@@ -53,9 +53,9 @@ listaSentencias:
 //      LEER  PARENIZQUIERDO  <listaIdentificadores>  PARENDERECHO  PUNTOYCOMA  |
 //      ESCRIBIR  PARENIZQUIERDO  <listaExpresiones>  PARENDERECHO  PUNTOYCOMA
 sentencia:
-    ID ASIGNACION expresion PUNTOYCOMA                                      { guardarValorEnTabla($1, $3); } //{ printf("Sentencia asignacion (valor = %d)\n", $3); }
-    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      //{ printf("Sentencia leer\n"); }
-    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      //{ printf("Sentencia escribir\n"); }
+    ID ASIGNACION expresion PUNTOYCOMA                                      { guardarValorEnTabla($1, $3); }
+    | LEER PARENIZQUIERDO listaIdentificadores PARENDERECHO PUNTOYCOMA      
+    | ESCRIBIR PARENIZQUIERDO listaExpresiones PARENDERECHO PUNTOYCOMA      
     ;
 
 // <listaIdentificadores>  ->  ID  {COMA  ID}
@@ -77,7 +77,7 @@ expresion:
 
 // <primaria>  ->  ID  |  CONSTANTE  | PARENIZQUIERDO  <expresión>  PARENDERECHO
 primaria:
-    ID                                                                      { $$ = leerValorSimbolo($1); } //{ $$ = atoi($1); } //no deveuelve el valor del identificador
+    ID                                                                      { $$ = leerValorSimbolo($1); }
     | CONSTANTE                                                             { $$ = $1; }
     | PARENIZQUIERDO expresion PARENDERECHO                                 { $$ = $2; }
     ;
@@ -91,6 +91,6 @@ operadorAditivo:
 %%
 
 
-void yyerror(const char *s) {
-    printf("Error en la expresion. %s\n", s);
+void yyerror(const char *msg) {
+    printf("Error en la expresion. %s\n", msg);
 }
