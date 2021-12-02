@@ -1,0 +1,10 @@
+inicio
+
+a := 10+(2-24);
+
+leer(a, b);
+
+leer(c);
+
+fin
+?
